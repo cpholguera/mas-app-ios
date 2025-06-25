@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var displayText: String = "" // Initial text
+    @State private var displayText = AttributedString("Click \"Start\" to run the test.\n\n")
 
     var body: some View {
         VStack {
@@ -23,7 +23,29 @@ struct ContentView: View {
                 Button(action: {
                     // Simulate calling a function and updating displayText
                     MastgTest.mastgTest { result in
-                        self.displayText = result
+                        
+                        self.displayText = AttributedString("Click \"Start\" to run the test.\n\n")
+                        
+                        let jsonData = result.data(using: .utf8)!
+                        let demoResults: [DemoResult] = try! JSONDecoder().decode([DemoResult].self, from: jsonData)
+
+                        for demoResult in demoResults{
+                            if demoResult.status == Status.pass{
+                                var result = AttributedString("PASS [" + demoResult.testId + "]: " + demoResult.message + "\n\n")
+                                result.foregroundColor = .green
+                                self.displayText.append(result)
+                            }
+                            else if demoResult.status == Status.fail{
+                                var result = AttributedString("FAIL [" + demoResult.testId + "]: " + demoResult.message + "\n\n")
+                                result.foregroundColor = .orange
+                                self.displayText.append(result)
+                            }
+                            else if demoResult.status == Status.error{
+                                var result = AttributedString("ERROR [" + demoResult.testId + "]: " + demoResult.message + "\n\n")
+                                result.foregroundColor = .red
+                                self.displayText.append(result)
+                            }
+                        }
                     }
                 }) {
                     Text("Start")
