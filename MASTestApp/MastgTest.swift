@@ -11,7 +11,7 @@ import os.log
 struct MastgTest {
     
     static func mastgTest(completion: @escaping (String) -> Void) {
-            let r = DemoResults(testId: "0000")
+            let r = DemoResults(demoId: "0000")
 
             do {
                 let sensitiveString = "Hello from the OWASP MASTG Test app."
