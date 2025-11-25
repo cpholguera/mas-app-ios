@@ -20,7 +20,7 @@ Create a new folder in the MASTG repository under the corresponding `demos/MASTG
 
 ### Clone the MASTestApp Repository
 
-Clone the app repository and open it in Android Studio.
+Clone the app repository and open it in Xcode.
 
 ```sh
 git clone https://github.com/cpholguera/MASTestApp-iOS.git
