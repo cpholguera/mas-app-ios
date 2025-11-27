@@ -12,6 +12,7 @@
 		CBFA8C0C2BDE94720047F3A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBFA8C0B2BDE94720047F3A3 /* Assets.xcassets */; };
 		CBFA8C0F2BDE94720047F3A3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBFA8C0E2BDE94720047F3A3 /* Preview Assets.xcassets */; };
 		CBFA8C162BDE97ED0047F3A3 /* MastgTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFA8C152BDE97ED0047F3A3 /* MastgTest.swift */; };
+		F85F705C2DDCCB3B0045930E /* DemoResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85F705B2DDCCB390045930E /* DemoResults.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		CBFA8C0B2BDE94720047F3A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBFA8C0E2BDE94720047F3A3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CBFA8C152BDE97ED0047F3A3 /* MastgTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastgTest.swift; sourceTree = "<group>"; };
+		F85F705B2DDCCB390045930E /* DemoResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoResults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 		CBFA8C062BDE94710047F3A3 /* MASTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				F85F705B2DDCCB390045930E /* DemoResults.swift */,
 				CBFA8C072BDE94710047F3A3 /* MASTestAppApp.swift */,
 				CBFA8C092BDE94710047F3A3 /* ContentView.swift */,
 				CBFA8C0B2BDE94720047F3A3 /* Assets.xcassets */,
@@ -142,6 +145,7 @@
 			files = (
 				CBFA8C162BDE97ED0047F3A3 /* MastgTest.swift in Sources */,
 				CBFA8C0A2BDE94710047F3A3 /* ContentView.swift in Sources */,
+				F85F705C2DDCCB3B0045930E /* DemoResults.swift in Sources */,
 				CBFA8C082BDE94710047F3A3 /* MASTestAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
