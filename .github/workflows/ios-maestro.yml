@@ -75,7 +75,7 @@ jobs:
 
       - name: Run Maestro Tests
         run: |
-          maestro test .maestro/app-test.yaml $BUNDLE_IDENTIFIER
+          maestro test .maestro/app-test.yaml
 
       - name: Upload Maestro Test Artifacts
         if: always()
