@@ -76,40 +76,13 @@ jobs:
       - name: Run Maestro Tests
         run: maestro test .maestro/app-test.yaml
 
-      - name: Build Maestro markdown report
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          echo "# Maestro report" >> "$GITHUB_STEP_SUMMARY"
-          echo >> "$GITHUB_STEP_SUMMARY"
-
-          find ~/.maestro/tests -name before.png | while read -r before; do
-            after="${before%before.png}after.png"
-
-            echo "## ${before#"$HOME"/}" >> "$GITHUB_STEP_SUMMARY"
-            echo >> "$GITHUB_STEP_SUMMARY"
-
-            b64_before="$(base64 < "$before" | tr -d '\n')"
-            echo "Before" >> "$GITHUB_STEP_SUMMARY"
-            echo >> "$GITHUB_STEP_SUMMARY"
-            echo "<img src=\"data:image/png;base64,${b64_before}\" width=\"320\" />" >> "$GITHUB_STEP_SUMMARY"
-            echo >> "$GITHUB_STEP_SUMMARY"
-
-            if [ -f "$after" ]; then
-              b64_after="$(base64 < "$after" | tr -d '\n')"
-              echo "After" >> "$GITHUB_STEP_SUMMARY"
-              echo >> "$GITHUB_STEP_SUMMARY"
-              echo "<img src=\"data:image/png;base64,${b64_after}\" width=\"320\" />" >> "$GITHUB_STEP_SUMMARY"
-              echo >> "$GITHUB_STEP_SUMMARY"
-            fi
-          done
-
-      - name: Upload Maestro report artifact
+      - name: Upload Maestro Test Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: maestro-report
-          path: maestro-report
+          name: maestro-test-results
+          path: |
+            ~/.maestro/tests/**/*
+            **/before.png
+            **/after.png
 
