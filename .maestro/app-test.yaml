@@ -5,4 +5,4 @@ appId: org.owasp.mastestapp.MASTestApp-iOS
 - takeScreenshot: before
 - tapOn: "Start"
 - takeScreenshot: after
-- assertVisible: "Random Number:"
+- assertVisible: ".*Random Number.*"
