@@ -1,0 +1,16 @@
+//
+//  Config.xcconfig
+//  MASTestApp
+//
+//  Created by Charlie on 16.12.25.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+#include "Local.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = $(BUNDLE_ID)
+CODE_SIGN_STYLE = $(CODE_SIGN)
+DEVELOPMENT_TEAM = $(DEV_TEAM)
+IPHONEOS_DEPLOYMENT_TARGET = $(IOS_DEPLOYMENT_TARGET)

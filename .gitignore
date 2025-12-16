@@ -95,3 +95,4 @@ DistributionSummary.plist
 output
 .DS_Store
 .idea/
+Local.xcconfig
