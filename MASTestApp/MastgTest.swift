@@ -1,10 +1,3 @@
-//
-//  MastgTest.swift
-//  MASTestApp
-//
-//  Created by Charlie on 28.04.24.
-//
-
 import SwiftUI
 
 struct MastgTest {

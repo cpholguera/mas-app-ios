@@ -46,12 +46,11 @@ The output will be:
 output/
 ├── MASTestApp
 ├── Info.plist
-└── MASTestApp.ipa
 ```
 
 ### If Your Demo Requires Static Analysis (Reverse Engineering)
 
-Run your reverse-engineering scripts on the compiled app (IPA) and ensure everything works as expected.
+Run your reverse-engineering scripts on the compiled app (MASTestApp) and ensure everything works as expected.
 
 ### If Your Demo Requires Dynamic Analysis
 
@@ -67,7 +66,7 @@ owasp-mastg/demos/MASTG-DEMO-XXXX/
 ├── Info.plist
 ├── MASTG-DEMO-XXXX.md
 ├── MASTestApp
-├── output.txt
+├── output.txt (or output.asm)
 └── run.sh
 ```
 
