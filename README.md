@@ -37,9 +37,9 @@ Before you can build the app, you need to configure your local development setti
    ```
 
 2. Edit `Local.xcconfig` with your own values:
-   - `BUNDLE_ID` (`PRODUCT_BUNDLE_IDENTIFIER`): Change it only if needed (otherwise, the default is `org.owasp.mastestapp.MASTestApp-iOS`)
-   - `DEV_TEAM` (`DEVELOPMENT_TEAM`): Your Apple Developer Team ID. Can quickly be obtained via `security find-identity -v -p codesigning`
-   - `IOS_DEPLOYMENT_TARGET` (`IPHONEOS_DEPLOYMENT_TARGET`): Change it if you need to target a different iOS version, e.g., for testing on older devices.
+   - `PRODUCT_BUNDLE_IDENTIFIER`: Change it only if needed (otherwise, the default is `org.owasp.mastestapp.MASTestApp-iOS`)
+   - `DEVELOPMENT_TEAM`: Your Apple Developer Team ID. Can quickly be obtained via `security find-identity -v -p codesigning`
+   - `IPHONEOS_DEPLOYMENT_TARGET`: Change it if you need to target a different iOS version, e.g., for testing on older devices.
 
 **Note:** `Local.xcconfig` is git-ignored and contains your personal development settings. Never commit this file.
 
