@@ -10,7 +10,3 @@
 
 #include "Local.xcconfig"
 
-PRODUCT_BUNDLE_IDENTIFIER = $(inherited)
-CODE_SIGN_STYLE = $(inherited)
-DEVELOPMENT_TEAM = $(inherited)
-IPHONEOS_DEPLOYMENT_TARGET = $(inherited)
