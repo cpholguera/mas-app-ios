@@ -43,6 +43,7 @@ jobs:
 
       - name: Build App for Simulator
         run: |
+          cp .github/Local.xcconfig.ci Local.xcconfig
           if ls -A | grep -iq "\.xcworkspace$"; then
             filetype_parameter="workspace"
             file_to_build=$(ls -A | grep -i "\.xcworkspace$")
