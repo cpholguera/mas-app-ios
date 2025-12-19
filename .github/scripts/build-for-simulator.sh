@@ -1,26 +1,17 @@
 #!/bin/bash
 
 # Build app for iOS Simulator
-# Usage: ./build-for-simulator.sh [scheme] [platform] [simulator]
-# Example: ./build-for-simulator.sh "MASTestApp" "iOS Simulator" "iPhone 17"
+# Usage: ./build-for-simulator.sh [simulator]
+# Example: ./build-for-simulator.sh "iPhone 17"
 
 set -e
 
 pushd "$(dirname "$0")/../.." > /dev/null || exit
 
-SCHEME="${1:-$DEFAULT_SCHEME}"
-PLATFORM="${2:-iOS Simulator}"
-SIMULATOR="${3:-iPhone 17}"
+SIMULATOR="${1}"
 BUILD_DIR="build/simulator"
 
-if [ -z "$SCHEME" ]; then
-  echo "Error: SCHEME is not set. Either pass it as argument or set DEFAULT_SCHEME environment variable."
-  exit 1
-fi
-
 echo "Building app for simulator..."
-echo "Scheme: $SCHEME"
-echo "Platform: $PLATFORM"
 echo "Simulator: $SIMULATOR"
 echo "Build directory: $BUILD_DIR"
 
@@ -42,9 +33,9 @@ echo "Building $filetype_parameter: $file_to_build"
 
 # Build with consistent output directory
 xcodebuild build \
-  -scheme "$SCHEME" \
+  -scheme "MASTestApp" \
   -"$filetype_parameter" "$file_to_build" \
-  -destination "platform=$PLATFORM,name=$SIMULATOR" \
+  -destination "platform=iOS Simulator,name=$SIMULATOR" \
   -derivedDataPath "$BUILD_DIR" \
   CODE_SIGN_IDENTITY="" \
   CODE_SIGNING_REQUIRED=NO \

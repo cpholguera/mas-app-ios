@@ -1,12 +1,15 @@
 #!/bin/bash
 
+# Build an unsigned archive of the app
+# Usage: ./build-unsigned.sh
+
 pushd "$(dirname "$0")/../.." > /dev/null || exit
 
 cp .github/Local.xcconfig.ci Local.xcconfig
 xcodebuild archive \
   -project "MASTestApp.xcodeproj" \
-  -scheme "$DEFAULT_SCHEME" \
-  -archivePath "/build/MASTestApp.xcarchive" \
+  -scheme "MASTestApp" \
+  -archivePath "build/MASTestApp.xcarchive" \
   -configuration Release \
   CODE_SIGN_IDENTITY="" \
   CODE_SIGNING_REQUIRED=NO \

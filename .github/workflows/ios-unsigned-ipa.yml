@@ -18,11 +18,8 @@ jobs:
       - name: Install dependencies
         run: .github/scripts/install-dependencies.sh
 
-      - name: Set Default Scheme
-        run: .github/scripts/set-default-scheme.sh
-
       - name: Build the app (unsigned)
-        run: .github/scripts/build-for-unsigned.sh
+        run: .github/scripts/build-unsigned.sh
 
       - name: Add Entitlements
         run: .github/scripts/add-entitlements.sh

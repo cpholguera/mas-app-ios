@@ -11,47 +11,37 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    uses: ./.github/workflows/build-simulator-reusable.yml
-    with:
-      simulator: "iPhone 17"
-
   test:
-    needs: build
     runs-on: macos-latest
     env:
-      BUNDLE_IDENTIFIER: org.owasp.mastestapp.MASTestApp-iOS
       SIMULATOR: "iPhone 17"
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: simulator-build
-          path: build/simulator/Build/Products/Debug-iphonesimulator
-
       - name: Install Appium and Python Dependencies
         run: |
           npm install -g appium
           python3 -m pip install --break-system-packages Appium-Python-Client
-      
-      - name: Install Appium Driver for XCUITest
-        run: appium driver install xcuitest
+          appium driver install xcuitest
 
       - name: Start Appium Server
         run: appium &
 
-      - name: Boot Simulator
-        run: .github/scripts/boot-simulator.sh "$SIMULATOR" 10
+      - name: Install Dependencies
+        run: .github/scripts/install-dependencies.sh
 
-      - name: Install and Launch App on Simulator
+      - name: Build App for Simulator
+        run: .github/scripts/build-for-simulator.sh "$SIMULATOR"
+
+      - name: Setup Simulator and Install App
         run: |
           APP_PATH=$(find build/simulator/Build/Products/Debug-iphonesimulator -name "*.app" | head -n 1)
-          .github/scripts/install-on-simulator.sh "$APP_PATH" "$SIMULATOR"
-          .github/scripts/launch-on-simulator.sh "$BUNDLE_IDENTIFIER" "$SIMULATOR"
+          .github/scripts/setup-simulator.sh "$APP_PATH" "$SIMULATOR" 10
+
+      - name: Launch App
+        run: .github/scripts/launch-on-simulator.sh "$SIMULATOR"
 
       - name: Capture Screenshot
         run: |

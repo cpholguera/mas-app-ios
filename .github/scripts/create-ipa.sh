@@ -8,8 +8,8 @@ set -e
 
 pushd "$(dirname "$0")/../.." > /dev/null || exit
 
-ARCHIVE_PATH="${1:-${GITHUB_WORKSPACE}/build/MASTestApp.xcarchive}"
-OUTPUT_PATH="${2:-${GITHUB_WORKSPACE}/output}"
+ARCHIVE_PATH="${1:-build/MASTestApp.xcarchive}"
+OUTPUT_PATH="${2:-output}"
 
 echo "Creating IPA from archive..."
 echo "Archive path: $ARCHIVE_PATH"

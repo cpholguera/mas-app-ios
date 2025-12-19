@@ -1,24 +1,13 @@
 #!/bin/bash
 
 # Build and test using any available iPhone simulator
-# Usage: ./build-for-testing.sh [scheme] [platform]
-# Example: ./build-for-testing.sh "MASTestApp" "iOS Simulator"
+# Usage: ./build-for-testing.sh
 
 set -e
 
 pushd "$(dirname "$0")/../.." > /dev/null || exit
 
-SCHEME="${1:-$DEFAULT_SCHEME}"
-PLATFORM="${2:-iOS Simulator}"
-
-if [ -z "$SCHEME" ]; then
-  echo "Error: SCHEME is not set. Either pass it as argument or set DEFAULT_SCHEME environment variable."
-  exit 1
-fi
-
 echo "Building for testing..."
-echo "Scheme: $SCHEME"
-echo "Platform: $PLATFORM"
 
 # Find device (xcrun xctrace returns via stderr)
 device=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//")
@@ -42,9 +31,9 @@ cp .github/Local.xcconfig.ci Local.xcconfig
 
 # Build for testing
 xcodebuild build-for-testing \
-  -scheme "$SCHEME" \
+  -scheme "MASTestApp" \
   -"$filetype_parameter" "$file_to_build" \
-  -destination "platform=$PLATFORM,name=$device"
+  -destination "platform=iOS Simulator,name=$device"
 
 echo "Build for testing completed successfully"
 
