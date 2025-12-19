@@ -2,9 +2,12 @@ name: Appium Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - test # TODO remove
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -35,57 +38,22 @@ jobs:
           # sleep 10
 
       - name: Install Dependencies
-        run: |
-          brew install ldid || true
-          brew install cocoapods || true
-          if [ -f Podfile ]; then
-            pod install --repo-update || true
-          fi
+        run: .github/scripts/install-dependencies.sh
 
       - name: Set Default Scheme
-        run: |
-          scheme_list=$(xcodebuild -list -json | tr -d "\n")
-          default=$(echo "$scheme_list" | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-          echo "DEFAULT_SCHEME=$default" >> $GITHUB_ENV
-          echo "Using default scheme: $default"
+        run: .github/scripts/set-default-scheme.sh
 
       - name: Build App for Simulator
-        run: |
-          cp .github/Local.xcconfig.ci Local.xcconfig
-          if ls -A | grep -iq "\.xcworkspace$"; then
-            filetype_parameter="workspace"
-            file_to_build=$(ls -A | grep -i "\.xcworkspace$")
-          else
-            filetype_parameter="project"
-            file_to_build=$(ls -A | grep -i "\.xcodeproj$")
-          fi
-          file_to_build=$(echo "$file_to_build" | awk '{$1=$1;print}')
-          # Build for simulator with code signing disabled
-          xcodebuild build \
-            -scheme "$DEFAULT_SCHEME" \
-            -"$filetype_parameter" "$file_to_build" \
-            -destination "platform=$PLATFORM,name=$SIMULATOR" \
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        run: .github/scripts/build-app-simulator.sh "$DEFAULT_SCHEME" "$PLATFORM" "$SIMULATOR"
 
       - name: Boot Simulator
-        run: |
-          # Boot the selected simulator if not already booted
-          xcrun simctl boot "$SIMULATOR" || echo "Simulator already booted"
-          # Allow time for the simulator to finish booting
-          sleep 10
+        run: .github/scripts/boot-simulator.sh "$SIMULATOR" 10
 
       - name: Install and Launch App on Simulator
         run: |
-          # Locate the built .app from DerivedData
-          APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "*.app" | head -n 1)
-          if [ -z "$APP_PATH" ]; then
-            echo "Error: Could not find the built .app file."
-            exit 1
-          fi
-          echo "Installing app from: $APP_PATH"
-          xcrun simctl install "$SIMULATOR" "$APP_PATH"
-          echo "Launching app with bundle identifier $BUNDLE_IDENTIFIER"
-          xcrun simctl launch "$SIMULATOR" "$BUNDLE_IDENTIFIER"
+          APP_PATH=$(.github/scripts/find-built-app.sh)
+          .github/scripts/install-app-simulator.sh "$APP_PATH" "$SIMULATOR"
+          .github/scripts/launch-app-simulator.sh "$BUNDLE_IDENTIFIER" "$SIMULATOR"
 
       - name: Capture Screenshot
         run: |

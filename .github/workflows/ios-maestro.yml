@@ -2,9 +2,12 @@ name: Maestro Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - test # TODO remove
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -27,52 +30,19 @@ jobs:
           echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
 
       - name: Install Dependencies
-        run: |
-          brew install ldid || true
-          brew install cocoapods || true
-          if [ -f Podfile ]; then
-            pod install --repo-update || true
-          fi
+        run: .github/scripts/install-dependencies.sh
 
       - name: Set Default Scheme
-        run: |
-          scheme_list=$(xcodebuild -list -json | tr -d "\n")
-          default=$(echo "$scheme_list" | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-          echo "DEFAULT_SCHEME=$default" >> $GITHUB_ENV
-          echo "Using default scheme: $default"
+        run: .github/scripts/set-default-scheme.sh
 
       - name: Build App for Simulator
-        run: |
-          cp .github/Local.xcconfig.ci Local.xcconfig
-          if ls -A | grep -iq "\.xcworkspace$"; then
-            filetype_parameter="workspace"
-            file_to_build=$(ls -A | grep -i "\.xcworkspace$")
-          else
-            filetype_parameter="project"
-            file_to_build=$(ls -A | grep -i "\.xcodeproj$")
-          fi
-          file_to_build=$(echo "$file_to_build" | awk '{$1=$1;print}')
-          # Build for simulator with code signing disabled
-          xcodebuild build \
-            -scheme "$DEFAULT_SCHEME" \
-            -"$filetype_parameter" "$file_to_build" \
-            -destination "platform=$PLATFORM,name=$SIMULATOR" \
-            -derivedDataPath DerivedData \
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        run: .github/scripts/build-app-simulator.sh "$DEFAULT_SCHEME" "$PLATFORM" "$SIMULATOR" "DerivedData"
 
       - name: Find and Install App
         run: |
-          # Locate the built .app from DerivedData
-          APP_PATH=$(find DerivedData -name "*.app" | head -n 1)
-          if [ -z "$APP_PATH" ]; then
-            echo "Error: Could not find the built .app file."
-            exit 1
-          fi
-          echo "Found app at: $APP_PATH"
-          # Boot the selected simulator if not already booted
-          xcrun simctl boot "$SIMULATOR" || echo "Simulator already booted"
-          # Install the app on the simulator
-          xcrun simctl install "$SIMULATOR" "$APP_PATH"
+          APP_PATH=$(.github/scripts/find-built-app.sh "DerivedData")
+          .github/scripts/boot-simulator.sh "$SIMULATOR" 0
+          .github/scripts/install-app-simulator.sh "$APP_PATH" "$SIMULATOR"
 
       - name: Run Maestro Tests
         run: maestro test .maestro/app-test.yaml
@@ -86,4 +56,3 @@ jobs:
             ~/.maestro/tests/**/*
             **/before.png
             **/after.png
-

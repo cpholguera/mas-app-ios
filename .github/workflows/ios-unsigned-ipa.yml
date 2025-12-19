@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - test # TODO remove
   workflow_dispatch:
 
 jobs:
@@ -11,58 +12,26 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: |
-        brew install ldid
-        brew install cocoapods
-        pod install --repo-update || true
+      - name: Install dependencies
+        run: .github/scripts/install-dependencies.sh
 
-    - name: Set iOS Deployment Target to 14.4
-      run: |
-        /usr/libexec/PlistBuddy -c "Set :objects:CBFA8C102BDE94720047F3A3:buildSettings:IPHONEOS_DEPLOYMENT_TARGET 14.4" "MASTestApp.xcodeproj/project.pbxproj"
-        /usr/libexec/PlistBuddy -c "Set :objects:CBFA8C112BDE94720047F3A3:buildSettings:IPHONEOS_DEPLOYMENT_TARGET 14.4" "MASTestApp.xcodeproj/project.pbxproj"
-        /usr/libexec/PlistBuddy -c "Set :objects:CBFA8C132BDE94720047F3A3:buildSettings:IPHONEOS_DEPLOYMENT_TARGET 14.4" "MASTestApp.xcodeproj/project.pbxproj"
-        /usr/libexec/PlistBuddy -c "Set :objects:CBFA8C142BDE94720047F3A3:buildSettings:IPHONEOS_DEPLOYMENT_TARGET 14.4" "MASTestApp.xcodeproj/project.pbxproj"
-        echo "iOS Deployment Target successfully updated to 14.4"
+      - name: Set Default Scheme
+        run: .github/scripts/set-default-scheme.sh
 
+      - name: Build the app (unsigned)
+        run: .github/scripts/build-app-unsigned.sh
 
-    - name: Set Default Scheme
-      run: |
-        scheme_list=$(xcodebuild -list -json | tr -d "\n")
-        default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-        echo "DEFAULT_SCHEME=$default" >> $GITHUB_ENV
-        echo "Using default scheme: $default"
+      - name: Add Entitlements
+        run: .github/scripts/add-entitlements.sh
 
-    - name: Build the app (unsigned)
-      run: |
-        cp .github/Local.xcconfig.ci Local.xcconfig
-        xcodebuild archive \
-          -project "MASTestApp.xcodeproj" \
-          -scheme "$DEFAULT_SCHEME" \
-          -archivePath "$GITHUB_WORKSPACE/build/MASTestApp.xcarchive" \
-          -configuration Release \
-          CODE_SIGN_IDENTITY="" \
-          CODE_SIGNING_REQUIRED=NO \
-          CODE_SIGNING_ALLOWED=NO
+      - name: Create IPA manually
+        run: .github/scripts/create-ipa.sh
 
-    - name: Add Entitlements
-      run: |
-        ldid -Sentitlements.plist "$GITHUB_WORKSPACE/build/MASTestApp.xcarchive/Products/Applications/MASTestApp.app/MASTestApp"
-
-    - name: Create IPA manually
-      run: |
-        cd "$GITHUB_WORKSPACE/build/MASTestApp.xcarchive/Products" || exit
-        mv Applications Payload
-        zip -r9q MASTestApp.zip Payload
-        mv MASTestApp.zip MASTestApp.ipa
-        mkdir -p "$GITHUB_WORKSPACE/output"
-        mv MASTestApp.ipa "$GITHUB_WORKSPACE/output/MASTestApp-unsigned.ipa"
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Unsigned-iOS-App
-        path: output/MASTestApp-unsigned.ipa
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Unsigned-iOS-App
+          path: output/MASTestApp-unsigned.ipa
