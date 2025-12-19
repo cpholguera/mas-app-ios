@@ -27,7 +27,7 @@ file_to_build=$(echo "$file_to_build" | awk '{$1=$1;print}')
 echo "Building $filetype_parameter: $file_to_build"
 
 # Copy CI config
-.github/scripts/setup-xcode-config.sh
+cp .github/Local.xcconfig.ci Local.xcconfig
 
 # Build for testing
 xcodebuild build-for-testing \

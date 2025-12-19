@@ -9,5 +9,4 @@ create-ipa.sh               # Create IPA from archive
 install-dependencies.sh     # Install brew deps & pods
 launch-on-simulator.sh      # Launch app on simulator
 setup-simulator.sh          # Boot + install (combined!)
-setup-xcode-config.sh       # Setup Xcode config for CI
 ```
