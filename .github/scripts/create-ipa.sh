@@ -1,21 +1,19 @@
 #!/bin/bash
 
 # Create IPA from xcarchive
-# Usage: ./create-ipa.sh [archive_path] [output_path]
-# Example: ./create-ipa.sh "build/MASTestApp.xcarchive" "output"
+# Usage: ./create-ipa.sh [ipa_name]
+# Example: ./create-ipa.sh "MyApp.ipa"
 
 set -e
 
 pushd "$(dirname "$0")/../.." > /dev/null || exit
 
-ARCHIVE_PATH="${1:-build/MASTestApp.xcarchive}"
-OUTPUT_PATH="${2:-output}"
+IPA_NAME="${1:-MASTestApp-unsigned.ipa}"
 
 echo "Creating IPA from archive..."
-echo "Archive path: $ARCHIVE_PATH"
-echo "Output path: $OUTPUT_PATH"
+echo "IPA name: $IPA_NAME"
 
-cd "$ARCHIVE_PATH/Products" || exit
+cd "build/MASTestApp.xcarchive/Products" || exit
 
 # Create Payload directory
 mv Applications Payload
@@ -26,10 +24,10 @@ zip -r9q MASTestApp.zip Payload
 mv MASTestApp.zip MASTestApp.ipa
 
 # Move to output directory
-mkdir -p "$OUTPUT_PATH"
-mv MASTestApp.ipa "$OUTPUT_PATH/MASTestApp-unsigned.ipa"
+mkdir -p "output"
+mv MASTestApp.ipa "output/$IPA_NAME"
 
-echo "IPA created successfully at: $OUTPUT_PATH/MASTestApp-unsigned.ipa"
+echo "IPA created successfully at: output/$IPA_NAME"
 
 popd > /dev/null || exit
 

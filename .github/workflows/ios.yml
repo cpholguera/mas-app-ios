@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - test # TODO remove
   pull_request:
     branches:
       - main

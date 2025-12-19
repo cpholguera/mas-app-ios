@@ -3,9 +3,13 @@
 # Build an unsigned archive of the app
 # Usage: ./build-unsigned.sh
 
+set -e
+
 pushd "$(dirname "$0")/../.." > /dev/null || exit
 
-cp .github/Local.xcconfig.ci Local.xcconfig
+# Copy CI config
+./github/scripts/setup-xcode-config.sh
+
 xcodebuild archive \
   -project "MASTestApp.xcodeproj" \
   -scheme "MASTestApp" \

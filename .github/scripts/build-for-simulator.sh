@@ -15,9 +15,6 @@ echo "Building app for simulator..."
 echo "Simulator: $SIMULATOR"
 echo "Build directory: $BUILD_DIR"
 
-# Copy CI config
-cp .github/Local.xcconfig.ci Local.xcconfig
-
 # Determine if we have a workspace or project
 if ls -A | grep -iq "\.xcworkspace$"; then
   filetype_parameter="workspace"
@@ -30,6 +27,9 @@ fi
 file_to_build=$(echo "$file_to_build" | awk '{$1=$1;print}')
 
 echo "Building $filetype_parameter: $file_to_build"
+
+# Copy CI config
+./github/scripts/setup-xcode-config.sh
 
 # Build with consistent output directory
 xcodebuild build \
