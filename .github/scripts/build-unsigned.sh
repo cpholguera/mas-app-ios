@@ -8,7 +8,7 @@ set -e
 pushd "$(dirname "$0")/../.." > /dev/null || exit
 
 # Copy CI config
-./github/scripts/setup-xcode-config.sh
+.github/scripts/setup-xcode-config.sh
 
 xcodebuild archive \
   -project "MASTestApp.xcodeproj" \
