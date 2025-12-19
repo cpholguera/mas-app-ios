@@ -11,38 +11,39 @@ on:
   workflow_dispatch:
 
 jobs:
+  build:
+    uses: ./.github/workflows/build-simulator-reusable.yml
+    with:
+      simulator: "iPhone 17"
+
   test:
+    needs: build
     runs-on: macos-latest
     permissions:
       contents: read
     env:
-      BUNDLE_IDENTIFIER: org.owasp.mastestapp.MASTestApp-iOS
-      PLATFORM: "iOS Simulator"
       SIMULATOR: "iPhone 17"
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: simulator-build
+          path: build/simulator/Build/Products/Debug-iphonesimulator
+
       - name: Install Maestro
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
 
-      - name: Install Dependencies
-        run: .github/scripts/install-dependencies.sh
-
-      - name: Set Default Scheme
-        run: .github/scripts/set-default-scheme.sh
-
-      - name: Build App for Simulator
-        run: .github/scripts/build-app-simulator.sh "$DEFAULT_SCHEME" "$PLATFORM" "$SIMULATOR" "DerivedData"
-
-      - name: Find and Install App
+      - name: Boot Simulator and Install App
         run: |
-          APP_PATH=$(.github/scripts/find-built-app.sh "DerivedData")
           .github/scripts/boot-simulator.sh "$SIMULATOR" 0
-          .github/scripts/install-app-simulator.sh "$APP_PATH" "$SIMULATOR"
+          APP_PATH=$(find build/simulator/Build/Products/Debug-iphonesimulator -name "*.app" | head -n 1)
+          .github/scripts/install-on-simulator.sh "$APP_PATH" "$SIMULATOR"
 
       - name: Run Maestro Tests
         run: maestro test .maestro/app-test.yaml

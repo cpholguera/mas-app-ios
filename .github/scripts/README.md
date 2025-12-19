@@ -217,18 +217,18 @@ Installs all required dependencies for building and testing.
 # 2. Install dependencies
 ./install-dependencies.sh
 
-# 3. Build for simulator
-./build-app-simulator.sh "$DEFAULT_SCHEME" "iOS Simulator" "iPhone 17" "DerivedData"
+# 3. Build for simulator (outputs to build/simulator/)
+./build-for-simulator.sh "$DEFAULT_SCHEME" "iOS Simulator" "iPhone 17"
 
 # 4. Boot simulator
 ./boot-simulator.sh "iPhone 17" 10
 
-# 5. Find and install app
-APP_PATH=$(./find-built-app.sh "DerivedData")
-./install-app-simulator.sh "$APP_PATH" "iPhone 17"
+# 5. Install app (from known build location)
+APP_PATH=$(find build/simulator/Build/Products/Debug-iphonesimulator -name "*.app" | head -n 1)
+./install-on-simulator.sh "$APP_PATH" "iPhone 17"
 
 # 6. Launch app
-./launch-app-simulator.sh "org.owasp.mastestapp.MASTestApp-iOS" "iPhone 17"
+./launch-on-simulator.sh "org.owasp.mastestapp.MASTestApp-iOS" "iPhone 17"
 ```
 
 ### Creating Unsigned IPA
@@ -241,7 +241,7 @@ APP_PATH=$(./find-built-app.sh "DerivedData")
 ./install-dependencies.sh
 
 # 3. Build unsigned archive
-./build-app-unsigned.sh
+./build-for-unsigned.sh
 
 # 4. Add entitlements
 ./add-entitlements.sh

@@ -12,15 +12,26 @@ on:
 
 jobs:
   build:
+    uses: ./.github/workflows/build-simulator-reusable.yml
+    with:
+      simulator: "iPhone 17"
+
+  test:
+    needs: build
     runs-on: macos-latest
     env:
       BUNDLE_IDENTIFIER: org.owasp.mastestapp.MASTestApp-iOS
-      PLATFORM: "iOS Simulator"
       SIMULATOR: "iPhone 17"
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: simulator-build
+          path: build/simulator/Build/Products/Debug-iphonesimulator
 
       - name: Install Appium and Python Dependencies
         run: |
@@ -28,36 +39,22 @@ jobs:
           python3 -m pip install --break-system-packages Appium-Python-Client
       
       - name: Install Appium Driver for XCUITest
-        run: |
-          appium driver install xcuitest
+        run: appium driver install xcuitest
 
       - name: Start Appium Server
-        run: |
-          # Start Appium in the background and give it a few seconds to initialize
-          appium & 
-          # sleep 10
-
-      - name: Install Dependencies
-        run: .github/scripts/install-dependencies.sh
-
-      - name: Set Default Scheme
-        run: .github/scripts/set-default-scheme.sh
-
-      - name: Build App for Simulator
-        run: .github/scripts/build-app-simulator.sh "$DEFAULT_SCHEME" "$PLATFORM" "$SIMULATOR"
+        run: appium &
 
       - name: Boot Simulator
         run: .github/scripts/boot-simulator.sh "$SIMULATOR" 10
 
       - name: Install and Launch App on Simulator
         run: |
-          APP_PATH=$(.github/scripts/find-built-app.sh)
-          .github/scripts/install-app-simulator.sh "$APP_PATH" "$SIMULATOR"
-          .github/scripts/launch-app-simulator.sh "$BUNDLE_IDENTIFIER" "$SIMULATOR"
+          APP_PATH=$(find build/simulator/Build/Products/Debug-iphonesimulator -name "*.app" | head -n 1)
+          .github/scripts/install-on-simulator.sh "$APP_PATH" "$SIMULATOR"
+          .github/scripts/launch-on-simulator.sh "$BUNDLE_IDENTIFIER" "$SIMULATOR"
 
       - name: Capture Screenshot
         run: |
-          # Wait for the app to fully launch before taking a screenshot
           sleep 10
           xcrun simctl io "$SIMULATOR" screenshot screenshot.png
 
@@ -68,11 +65,7 @@ jobs:
           path: screenshot.png
 
       - name: Run Appium UI Test
-        # env: # currently not working so we attach to the running app instead
-          # Pass the built app's path to the test script; Appium requires the .app folder.
-          # APP_PATH: "build/MASTestApp.xcarchive/Products/Applications/MASTestApp.app"
-        run: |
-          python3 tools/appium_script.py
+        run: python3 tools/appium_script.py
 
       - name: Upload Test Artifacts
         uses: actions/upload-artifact@v4
