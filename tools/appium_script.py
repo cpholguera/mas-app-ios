@@ -22,8 +22,8 @@ def main():
 
     # Set up options
     options = XCUITestOptions()
-    options.platform_version = "26.1"
-    options.device_name = "iPhone 17"
+    options.platform_version = "18.6"
+    options.device_name = "iPhone 16"
     
     # Use the bundle identifier to attach to the running app
     options.bundle_id = "org.owasp.mastestapp.MASTestApp-iOS"
