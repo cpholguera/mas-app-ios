@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var displayText = AttributedString("Click \"Start\" to run the test.\n\n")
+  @State private var displayText = AttributedString("") //Inital text
 
     var body: some View {
         VStack {
@@ -24,7 +24,7 @@ struct ContentView: View {
                     // Simulate calling a function and updating displayText
                     MastgTest.mastgTest { result in
                         
-                        self.displayText = AttributedString("Click \"Start\" to run the test.\n\n")
+                        self.displayText = AttributedString("") //Inital text
                         
                         do {
                             let jsonData = result.data(using: .utf8)!
@@ -49,7 +49,7 @@ struct ContentView: View {
                             }
                         }
                         catch {
-                            self.displayText.append(AttributedString(result + "\n\n"))
+                            self.displayText.append(AttributedString(result))
                         }
                     }
                 }) {
