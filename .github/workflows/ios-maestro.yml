@@ -1,4 +1,4 @@
-name: Appium Test
+name: Maestro Test
 
 on:
   push:
@@ -8,8 +8,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: macos-latest
+    permissions:
+      contents: read
     env:
       BUNDLE_IDENTIFIER: org.owasp.mastestapp.MASTestApp-iOS
       PLATFORM: "iOS Simulator"
@@ -19,20 +21,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Appium and Python Dependencies
+      - name: Install Maestro
         run: |
-          npm install -g appium
-          python3 -m pip install --break-system-packages Appium-Python-Client
-      
-      - name: Install Appium Driver for XCUITest
-        run: |
-          appium driver install xcuitest
-
-      - name: Start Appium Server
-        run: |
-          # Start Appium in the background and give it a few seconds to initialize
-          appium & 
-          # sleep 10
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
 
       - name: Install Dependencies
         run: |
@@ -65,52 +57,33 @@ jobs:
             -scheme "$DEFAULT_SCHEME" \
             -"$filetype_parameter" "$file_to_build" \
             -destination "platform=$PLATFORM,name=$SIMULATOR" \
+            -derivedDataPath DerivedData \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
-      - name: Boot Simulator
-        run: |
-          # Boot the selected simulator if not already booted
-          xcrun simctl boot "$SIMULATOR" || echo "Simulator already booted"
-          # Allow time for the simulator to finish booting
-          sleep 10
-
-      - name: Install and Launch App on Simulator
+      - name: Find and Install App
         run: |
           # Locate the built .app from DerivedData
-          APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "*.app" | head -n 1)
+          APP_PATH=$(find DerivedData -name "*.app" | head -n 1)
           if [ -z "$APP_PATH" ]; then
             echo "Error: Could not find the built .app file."
             exit 1
           fi
-          echo "Installing app from: $APP_PATH"
+          echo "Found app at: $APP_PATH"
+          # Boot the selected simulator if not already booted
+          xcrun simctl boot "$SIMULATOR" || echo "Simulator already booted"
+          # Install the app on the simulator
           xcrun simctl install "$SIMULATOR" "$APP_PATH"
-          echo "Launching app with bundle identifier $BUNDLE_IDENTIFIER"
-          xcrun simctl launch "$SIMULATOR" "$BUNDLE_IDENTIFIER"
 
-      - name: Capture Screenshot
-        run: |
-          # Wait for the app to fully launch before taking a screenshot
-          sleep 10
-          xcrun simctl io "$SIMULATOR" screenshot screenshot.png
+      - name: Run Maestro Tests
+        run: maestro test .maestro/app-test.yaml
 
-      - name: Upload Screenshot Artifact
+      - name: Upload Maestro Test Artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: iOS-Screenshot
-          path: screenshot.png
-
-      - name: Run Appium UI Test
-        # env: # currently not working so we attach to the running app instead
-          # Pass the built app's path to the test script; Appium requires the .app folder.
-          # APP_PATH: "build/MASTestApp.xcarchive/Products/Applications/MASTestApp.app"
-        run: |
-          python3 tools/appium_script.py
-
-      - name: Upload Test Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: UI-Test-Artifacts
+          name: maestro-test-results
           path: |
-            before_start.png
-            after_start.png
-            final_screen.xml
+            ~/.maestro/tests/**/*
+            **/before.png
+            **/after.png
+

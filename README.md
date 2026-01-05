@@ -20,11 +20,28 @@ Create a new folder in the MASTG repository under the corresponding `demos/MASTG
 
 ### Clone the MASTestApp Repository
 
-Clone the app repository and open it in Android Studio.
+Clone the app repository and open it in Xcode.
 
 ```sh
 git clone https://github.com/cpholguera/MASTestApp-iOS.git
 ```
+
+### Configure Your Development Environment
+
+Before you can build the app, you need to configure your local development settings:
+
+1. Copy the example configuration file:
+
+   ```sh
+   cp Local.xcconfig.example Local.xcconfig
+   ```
+
+2. Edit `Local.xcconfig` with your own values:
+   - `PRODUCT_BUNDLE_IDENTIFIER`: Change it only if needed (otherwise, the default is `org.owasp.mastestapp.MASTestApp-iOS`)
+   - `DEVELOPMENT_TEAM`: Your Apple Developer Team ID. Can quickly be obtained via `security find-identity -v -p codesigning`
+   - `IPHONEOS_DEPLOYMENT_TARGET`: Change it if you need to target a different iOS version, e.g., for testing on older devices.
+
+**Note:** `Local.xcconfig` is git-ignored and contains your personal development settings. Never commit this file.
 
 ### Add Your Demo Code
 
@@ -46,12 +63,11 @@ The output will be:
 output/
 ├── MASTestApp
 ├── Info.plist
-└── MASTestApp.ipa
 ```
 
 ### If Your Demo Requires Static Analysis (Reverse Engineering)
 
-Run your reverse-engineering scripts on the compiled app (IPA) and ensure everything works as expected.
+Run your reverse-engineering scripts on the compiled app (MASTestApp) and ensure everything works as expected.
 
 ### If Your Demo Requires Dynamic Analysis
 
@@ -67,7 +83,7 @@ owasp-mastg/demos/MASTG-DEMO-XXXX/
 ├── Info.plist
 ├── MASTG-DEMO-XXXX.md
 ├── MASTestApp
-├── output.txt
+├── output.txt (or output.asm)
 └── run.sh
 ```
 
