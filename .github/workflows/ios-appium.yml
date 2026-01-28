@@ -34,11 +34,10 @@ jobs:
       - name: Build App for Simulator
         run: .github/scripts/build-for-simulator.sh "$SIMULATOR"
 
-      - name: Setup Simulator and Install App
-        run: .github/scripts/setup-simulator.sh "$SIMULATOR"
-
-      - name: Launch App
-        run: .github/scripts/launch-on-simulator.sh "$SIMULATOR"
+      - name: Setup Simulator, Install and Launch App
+        run: |
+          .github/scripts/setup-on-simulator.sh "$SIMULATOR"
+          .github/scripts/launch-on-simulator.sh "$SIMULATOR"
 
       - name: Capture Screenshot
         run: |

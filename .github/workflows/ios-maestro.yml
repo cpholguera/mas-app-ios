@@ -33,7 +33,7 @@ jobs:
         run: .github/scripts/build-for-simulator.sh "$SIMULATOR"
 
       - name: Setup Simulator and Install App
-        run: .github/scripts/setup-simulator.sh "$APP_PATH" "$SIMULATOR" 0
+        run: .github/scripts/setup-on-simulator.sh "$SIMULATOR"
 
       - name: Run Maestro Tests
         run: maestro test .maestro/app-test.yaml

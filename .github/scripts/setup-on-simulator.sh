@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Setup simulator: boot and install app
-# Usage: ./setup-simulator.sh <simulator_name> [app_path] [wait_seconds]
-# Example: ./setup-simulator.sh "iPhone 17"
-#          ./setup-simulator.sh "iPhone 17" "path/to/app.app"
-#          ./setup-simulator.sh "iPhone 17" "path/to/app.app" 15
+# Usage:   ./setup-on-simulator.sh <simulator_name> [app_path] [wait_seconds]
+# Example: ./setup-on-simulator.sh "iPhone 17"
+#          ./setup-on-simulator.sh "iPhone 17" "path/to/app.app"
+#          ./setup-on-simulator.sh "iPhone 17" "path/to/app.app" 15
 
 set -e
 
@@ -22,12 +22,14 @@ echo "Setting up simulator: $SIMULATOR"
 echo "App path: $APP_PATH"
 
 # Boot the selected simulator if not already booted
-xcrun simctl boot "$SIMULATOR" || echo "Simulator already booted"
-
-# Wait for simulator to boot
-if [ "$WAIT_SECONDS" -gt 0 ]; then
-  echo "Waiting $WAIT_SECONDS seconds for simulator to boot..."
-  sleep "$WAIT_SECONDS"
+if xcrun simctl boot "$SIMULATOR" 2>&1 | grep -q "Unable to boot device in current state: Booted"; then
+  echo "Simulator already booted"
+else
+  # Wait for simulator to boot only if we just booted it
+  if [ "$WAIT_SECONDS" -gt 0 ]; then
+    echo "Waiting $WAIT_SECONDS seconds for simulator to boot..."
+    sleep "$WAIT_SECONDS"
+  fi
 fi
 
 # Install app on simulator
