@@ -41,7 +41,7 @@ elif [ "$boot_result" -eq 149 ]; then
 else
   echo "Error: Failed to boot simulator, reason: $boot_error" >&2
   echo "Available simulators:"
-  xcrun simctl list devices
+  xcrun simctl list devices available
   exit 1
 fi
 
