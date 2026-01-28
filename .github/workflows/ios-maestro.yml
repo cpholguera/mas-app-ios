@@ -35,10 +35,6 @@ jobs:
       - name: Setup Simulator and Install App
         run: |
           APP_PATH=$(find build/simulator/Build/Products/Debug-iphonesimulator -name "*.app" | head -n 1)
-          if [ -z "$APP_PATH" ]; then
-            echo "Error: No .app file found in build/simulator/Build/Products/Debug-iphonesimulator"
-            exit 1
-          fi
           .github/scripts/setup-simulator.sh "$APP_PATH" "$SIMULATOR" 0
 
       - name: Run Maestro Tests
