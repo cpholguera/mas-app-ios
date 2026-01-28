@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var displayText: String = "" // Initial text
+  @State private var displayText = AttributedString("") //Inital text
 
     var body: some View {
         VStack {
@@ -23,7 +23,34 @@ struct ContentView: View {
                 Button(action: {
                     // Simulate calling a function and updating displayText
                     MastgTest.mastgTest { result in
-                        self.displayText = result
+                        
+                        self.displayText = AttributedString("") //Inital text
+                        
+                        do {
+                            let jsonData = result.data(using: .utf8)!
+                            let demoResults: [DemoResult] = try JSONDecoder().decode([DemoResult].self, from: jsonData)
+
+                            for demoResult in demoResults{
+                                if demoResult.status == Status.pass{
+                                    var result = AttributedString("MASTG-DEMO-\(demoResult.demoId) demonstrated a successful test:\n\(demoResult.message) \n\n")
+                                    result.foregroundColor = .green
+                                    self.displayText.append(result)
+                                }
+                                else if demoResult.status == Status.fail{
+                                    var result = AttributedString("MASTG-DEMO-\(demoResult.demoId) demonstrated a failed test:\n\(demoResult.message) \n\n")
+                                    result.foregroundColor = .orange
+                                    self.displayText.append(result)
+                                }
+                                else if demoResult.status == Status.error{
+                                    var result = AttributedString("MASTG-DEMO-\(demoResult.demoId) failed:\n\(demoResult.message)\n\n")
+                                    result.foregroundColor = .red
+                                    self.displayText.append(result)
+                                }
+                            }
+                        }
+                        catch {
+                            self.displayText.append(AttributedString(result))
+                        }
                     }
                 }) {
                     Text("Start")
