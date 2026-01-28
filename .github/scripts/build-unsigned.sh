@@ -1,34 +1,23 @@
 #!/bin/bash
 
 # Build an unsigned archive of the app
-# Usage: ./build-unsigned.sh
+# Usage: ./build-unsigned.sh [scheme]
+# Example: ./build-unsigned.sh "MASTestApp"
 
 set -e
 
-pushd "$(dirname "$0")/../.." > /dev/null || exit
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+pushd "$SCRIPT_DIR/../.." > /dev/null || exit
+source "$SCRIPT_DIR/common.sh"
 
-# Copy CI config
-cp .github/Local.xcconfig.ci Local.xcconfig
-
-# Determine whether to build using a workspace or a project.
-# Prefer a workspace if one exists; otherwise fall back to a project.
-if compgen -G "*.xcworkspace" > /dev/null; then
-  # Use the first workspace found in the current directory
-  WORKSPACE_FILE=$(ls *.xcworkspace | head -n 1)
-  PROJECT_SPECIFIER=(-workspace "$WORKSPACE_FILE")
-elif compgen -G "*.xcodeproj" > /dev/null; then
-  # Use the first project found in the current directory
-  PROJECT_FILE=$(ls *.xcodeproj | head -n 1)
-  PROJECT_SPECIFIER (-project "$PROJECT_FILE")
-else
-  # Fallback to the original hardcoded project name for backwards compatibility
-  PROJECT_SPECIFIER=(-project "MASTestApp.xcodeproj")
-fi
+detect_xcode_project
+detect_scheme "${1:-}"
+copy_ci_config
 
 xcodebuild archive \
-  "${PROJECT_SPECIFIER[@]}" \
-  -scheme "MASTestApp" \
-  -archivePath "build/MASTestApp.xcarchive" \
+  -scheme "$APP_NAME" \
+  -"$FILETYPE_PARAMETER" "$FILE_TO_BUILD" \
+  -archivePath "build/$APP_NAME.xcarchive" \
   -configuration Release \
   CODE_SIGN_IDENTITY="" \
   CODE_SIGNING_REQUIRED=NO \

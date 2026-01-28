@@ -1,41 +1,34 @@
 #!/bin/bash
 
 # Build app for iOS Simulator
-# Usage: ./build-for-simulator.sh [simulator]
-# Example: ./build-for-simulator.sh "iPhone 17"
+# Usage: ./build-for-simulator.sh <simulator> [os_version] [scheme]
+# Examples: ./build-for-simulator.sh "iPhone 17" "latest" "MASTestApp"
+#           ./build-for-simulator.sh "iPhone 16e .1" "26.1"
 
 set -e
 
-pushd "$(dirname "$0")/../.." > /dev/null || exit
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+pushd "$SCRIPT_DIR/../.." > /dev/null || exit
+source "$SCRIPT_DIR/common.sh"
 
 SIMULATOR="${1}"
+OS_VERSION="${2:-latest}"
 BUILD_DIR="build/simulator"
 
 echo "Building app for simulator..."
 echo "Simulator: $SIMULATOR"
+echo "OS version: $OS_VERSION"
 echo "Build directory: $BUILD_DIR"
 
-# Determine if we have a workspace or project
-if ls -A | grep -iq "\.xcworkspace$"; then
-  filetype_parameter="workspace"
-  file_to_build=$(ls -A | grep -i "\.xcworkspace$")
-else
-  filetype_parameter="project"
-  file_to_build=$(ls -A | grep -i "\.xcodeproj$")
-fi
-
-file_to_build=$(echo "$file_to_build" | awk '{$1=$1;print}')
-
-echo "Building $filetype_parameter: $file_to_build"
-
-# Copy CI config
-cp .github/Local.xcconfig.ci Local.xcconfig
+detect_xcode_project
+detect_scheme "${3:-}"
+copy_ci_config
 
 # Build with consistent output directory
 xcodebuild build \
-  -scheme "MASTestApp" \
-  -"$filetype_parameter" "$file_to_build" \
-  -destination "platform=iOS Simulator,name=$SIMULATOR" \
+  -scheme "$APP_NAME" \
+  -"$FILETYPE_PARAMETER" "$FILE_TO_BUILD" \
+  -destination "platform=iOS Simulator,OS=$OS_VERSION,name=$SIMULATOR" \
   -derivedDataPath "$BUILD_DIR" \
   CODE_SIGN_IDENTITY="" \
   CODE_SIGNING_REQUIRED=NO \
@@ -45,4 +38,3 @@ echo "Build completed successfully"
 echo "App location: $BUILD_DIR/Build/Products/Debug-iphonesimulator/*.app"
 
 popd > /dev/null || exit
-
