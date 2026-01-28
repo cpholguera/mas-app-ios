@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Build and test using any available iPhone simulator
-# Usage: ./build-for-testing.sh [scheme]
-# Example: ./build-for-testing.sh "MASTestApp"
+# Usage:   ./build-for-testing.sh [scheme]
+# Example: ./build-for-testing.sh
+#          ./build-for-testing.sh "MASTestApp"
 
 set -e
 

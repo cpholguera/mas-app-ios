@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Build an unsigned archive of the app
-# Usage: ./build-unsigned.sh [scheme]
-# Example: ./build-unsigned.sh "MASTestApp"
+# Usage:   ./build-unsigned.sh [scheme]
+# Example: ./build-unsigned.sh
+#          ./build-unsigned.sh "MASTestApp"
 
 set -e
 

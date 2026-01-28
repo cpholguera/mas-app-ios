@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build app for iOS Simulator
-# Usage: ./build-for-simulator.sh <simulator> [os_version] [scheme]
+# Usage:    ./build-for-simulator.sh <simulator> [os_version] [scheme]
 # Examples: ./build-for-simulator.sh "iPhone 17"
 #           ./build-for-simulator.sh "iPhone 17" "26.1"
 #           ./build-for-simulator.sh "iPhone 17" "26.1" "MASTestApp"
