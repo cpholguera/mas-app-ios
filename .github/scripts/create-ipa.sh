@@ -8,24 +8,25 @@ set -e
 
 pushd "$(dirname "$0")/../.." > /dev/null || exit
 
-IPA_NAME="${1:-MASTestApp-unsigned.ipa}"
+APP_NAME="${APP_NAME:-MASTestApp}"
+IPA_NAME="${1:-$APP_NAME-unsigned.ipa}"
 
 echo "Creating IPA from archive..."
 echo "IPA name: $IPA_NAME"
 
-cd "build/MASTestApp.xcarchive/Products" || exit
+cd "build/$APP_NAME.xcarchive/Products" || exit
 
 # Create Payload directory
 mv Applications Payload
 
 # Create IPA
 echo "Creating IPA archive..."
-zip -r9q MASTestApp.zip Payload
-mv MASTestApp.zip MASTestApp.ipa
+zip -r9q "$APP_NAME.zip" Payload
+mv "$APP_NAME.zip" "$APP_NAME.ipa"
 
 # Move to output directory
 mkdir -p "output"
-mv MASTestApp.ipa "output/$IPA_NAME"
+mv "$APP_NAME.ipa" "output/$IPA_NAME"
 
 echo "IPA created successfully at: output/$IPA_NAME"
 

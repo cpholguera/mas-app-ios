@@ -1,16 +1,17 @@
 #!/bin/bash
 
 # Launch app on iOS Simulator
-# Usage: ./launch-app-simulator.sh [simulator_name]
-# Example: ./launch-app-simulator.sh "iPhone 17"
+# Usage: ./launch-app-simulator.sh [simulator_name] [bundle_identifier]
+# Example: ./launch-app-simulator.sh "iPhone 17" "org.owasp.mastestapp.MASTestApp-iOS"
 
 set -e
 
 SIMULATOR="${1}"
+BUNDLE_ID="${2:-${BUNDLE_ID:-org.owasp.mastestapp.MASTestApp-iOS}}"
 
 echo "Launching app on simulator: $SIMULATOR"
 
-xcrun simctl launch "$SIMULATOR" "org.owasp.mastestapp.MASTestApp-iOS"
+xcrun simctl launch "$SIMULATOR" "$BUNDLE_ID"
 
 echo "App launched successfully"
 

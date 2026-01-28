@@ -26,12 +26,25 @@ file_to_build=$(echo "$file_to_build" | awk '{$1=$1;print}')
 
 echo "Building $filetype_parameter: $file_to_build"
 
+# Determine scheme: prefer CLI argument, then auto-detect, then fall back to MASTestApp
+if [ -n "$1" ]; then
+  scheme="$1"
+else
+  scheme=$(xcodebuild -list -"$filetype_parameter" "$file_to_build" 2>/dev/null | \
+    awk '/Schemes:/{flag=1;next} /^$/{flag=0} flag' | head -n 1 | awk '{$1=$1;print}')
+  if [ -z "$scheme" ]; then
+    scheme="MASTestApp"
+  fi
+fi
+
+echo "Scheme: $scheme"
+
 # Copy CI config
 cp .github/Local.xcconfig.ci Local.xcconfig
 
 # Build for testing
 xcodebuild build-for-testing \
-  -scheme "MASTestApp" \
+  -scheme "$scheme" \
   -"$filetype_parameter" "$file_to_build" \
   -destination "platform=iOS Simulator,name=$device"
 
