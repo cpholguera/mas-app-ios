@@ -35,9 +35,7 @@ jobs:
         run: .github/scripts/build-for-simulator.sh "$SIMULATOR"
 
       - name: Setup Simulator and Install App
-        run: |
-          APP_PATH=$(find build/simulator/Build/Products/Debug-iphonesimulator -name "*.app" | head -n 1)
-          .github/scripts/setup-simulator.sh "$APP_PATH" "$SIMULATOR" 10
+        run: .github/scripts/setup-simulator.sh "$SIMULATOR"
 
       - name: Launch App
         run: .github/scripts/launch-on-simulator.sh "$SIMULATOR"

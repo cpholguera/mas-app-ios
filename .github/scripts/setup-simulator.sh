@@ -1,23 +1,21 @@
 #!/bin/bash
 
 # Setup simulator: boot and install app
-# Usage: ./setup-simulator.sh <app_path> [simulator_name] [wait_seconds]
-# Example: ./setup-simulator.sh "build/simulator/Build/Products/Debug-iphonesimulator/App.app" "iPhone 17" 10
+# Usage: ./setup-simulator.sh <simulator_name> [app_path] [wait_seconds]
+# Example: ./setup-simulator.sh "iPhone 17"
+#          ./setup-simulator.sh "iPhone 17" "path/to/app.app"
+#          ./setup-simulator.sh "iPhone 17" "path/to/app.app" 15
 
 set -e
 
-APP_PATH="${1}"
-SIMULATOR="${2}"
+pushd "$(dirname "$0")/../.." > /dev/null || exit
+
+SIMULATOR="${1}"
+APP_PATH="${2}"
 WAIT_SECONDS="${3:-10}"
 
 if [ -z "$APP_PATH" ]; then
-  echo "Error: APP_PATH is required as first argument"
-  exit 1
-fi
-
-if [ ! -d "$APP_PATH" ]; then
-  echo "Error: App not found at: $APP_PATH"
-  exit 1
+  APP_PATH=$(find build/simulator/Build/Products/Debug-iphonesimulator -name "*.app" | head -n 1)
 fi
 
 echo "Setting up simulator: $SIMULATOR"
@@ -38,3 +36,4 @@ xcrun simctl install "$SIMULATOR" "$APP_PATH"
 
 echo "Simulator setup complete"
 
+popd > /dev/null || exit

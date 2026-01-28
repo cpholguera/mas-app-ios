@@ -43,6 +43,6 @@ xcodebuild build \
   CODE_SIGNING_ALLOWED=NO
 
 echo "Build completed successfully"
-echo "App location: $BUILD_DIR/Build/Products/Debug-iphonesimulator/*.app"
+echo "App location: $BUILD_DIR/Build/Products/Debug-iphonesimulator/$APP_NAME.app"
 
 popd > /dev/null || exit
