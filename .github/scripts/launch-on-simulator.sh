@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Launch app on iOS Simulator
-# Usage: ./launch-app-simulator.sh [simulator_name] [bundle_identifier]
-# Example: ./launch-app-simulator.sh "iPhone 17" "org.owasp.mastestapp.MASTestApp-iOS"
+# Usage: ./launch-on-simulator.sh [simulator_name] [bundle_identifier]
+# Example: ./launch-on-simulator.sh "iPhone 17" "org.owasp.mastestapp.MASTestApp-iOS"
 
 set -e
 
