@@ -22,7 +22,7 @@ def main():
 
     # Set up options
     options = XCUITestOptions()
-    options.platform_version = "26.1"
+    options.platform_version = "26.2"
     options.device_name = "iPhone 17"
     
     # Use the bundle identifier to attach to the running app
