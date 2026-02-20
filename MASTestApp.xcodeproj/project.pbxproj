@@ -24,6 +24,7 @@
 		CBFA8C0B2BDE94720047F3A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBFA8C0E2BDE94720047F3A3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CBFA8C152BDE97ED0047F3A3 /* MastgTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastgTest.swift; sourceTree = "<group>"; };
+		CBFB69F82F48D20300DA165C /* MASTestAppDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MASTestAppDebug.entitlements; sourceTree = "<group>"; };
 		F85F705B2DDCCB390045930E /* DemoResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoResults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,6 +59,7 @@
 		CBFA8C062BDE94710047F3A3 /* MASTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				CBFB69F82F48D20300DA165C /* MASTestAppDebug.entitlements */,
 				F85F705B2DDCCB390045930E /* DemoResults.swift */,
 				CBFA8C072BDE94710047F3A3 /* MASTestAppApp.swift */,
 				CBFA8C092BDE94710047F3A3 /* ContentView.swift */,
@@ -286,6 +288,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MASTestApp/MASTestAppDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = "$(CODE_SIGN_STYLE)";
 				CURRENT_PROJECT_VERSION = 1;
