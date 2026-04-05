@@ -27,7 +27,9 @@ jobs:
           echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
 
       - name: Install Dependencies
-        run: .github/scripts/install-dependencies.sh
+        uses: tecolicom/actions-use-homebrew-tools@v1
+        with:
+          tools: ldid
 
       - name: Build App for Simulator
         run: .github/scripts/build-for-simulator.sh "$SIMULATOR"
