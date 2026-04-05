@@ -43,7 +43,7 @@ BASE_PLIST="entitlements.plist"
 TARGET_PLIST="$BASE_PLIST"
 
 if [ -n "$EXTRA_PLIST" ]; then
-  MERGED_PLIST=$(mktemp /tmp/entitlements.XXXXXX.plist)
+  MERGED_PLIST=$(mktemp /tmp/entitlements.XXXXXX)
   cp "$EXTRA_PLIST" "$MERGED_PLIST"
   /usr/libexec/PlistBuddy -c "Merge $BASE_PLIST" "$MERGED_PLIST"
   TARGET_PLIST="$MERGED_PLIST"

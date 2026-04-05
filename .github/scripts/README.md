@@ -18,7 +18,7 @@ xcrun simctl list devices available
 **2. Build, boot simulator and install app:** (scripts auto-copy Local.xcconfig.ci, no manual config needed)
 
 ```bash
-.github/scripts/build-and-install-on-simulator.sh "iPhone 17"
+./build-and-install-on-simulator.sh "iPhone 17"
 ```
 
 **3. Launch it:**
@@ -43,13 +43,13 @@ There's no script for a signed device build — use Xcode directly (`Cmd+R` with
 
 ```bash
 brew install ldid
-.github/scripts/build-and-package.sh     # builds xcarchive, signs with ldid, packages as IPA → output/MASTestApp-unsigned.ipa
+./build-and-package.sh     # builds xcarchive, signs with ldid, packages as IPA → output/MASTestApp-unsigned.ipa
 ```
 
-Optionally, pass a custom entitlements plist to merge with the default one:
+Optionally, pass a custom IPA name and/or a custom entitlements plist to merge with the default one:
 
 ```bash
-.github/scripts/build-and-package.sh "" path/to/extra-entitlements.plist
+./build-and-package.sh "MASTestApp-DEMO-0001.ipa" path/to/extra-entitlements.plist
 ```
 
 Then sideload with `ideviceinstaller` or a tool like Sideloadly.
