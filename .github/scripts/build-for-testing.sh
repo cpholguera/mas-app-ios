@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# Build and test using any available iPhone simulator
-# Usage:   ./build-for-testing.sh [scheme]
-# Example: ./build-for-testing.sh
-#          ./build-for-testing.sh "MASTestApp"
+# Build for tests using any available iPhone simulator
+# Usage:   ./build-for-testing.sh
 
 set -e
 
@@ -18,7 +16,7 @@ DEVICE=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 
 echo "Device: $DEVICE"
 
 detect_xcode_project
-detect_scheme "${1:-}"
+detect_scheme
 copy_ci_config
 
 # Build for testing

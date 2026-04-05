@@ -26,14 +26,8 @@ jobs:
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
 
-      - name: Install Dependencies
-        run: brew install ldid
-
-      - name: Build App for Simulator
-        run: .github/scripts/build-for-simulator.sh "$SIMULATOR"
-
-      - name: Setup Simulator and Install App
-        run: .github/scripts/setup-on-simulator.sh "$SIMULATOR"
+      - name: Build App, Boot Simulator and Install App
+        run: .github/scripts/build-and-install-on-simulator.sh "$SIMULATOR"
 
       - name: Run Maestro Tests
         run: maestro test .maestro/app-test.yaml

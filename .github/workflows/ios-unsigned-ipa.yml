@@ -1,4 +1,4 @@
-name: Build iOS App (Unsigned IPA)
+name: Build Unsigned iOS IPA
 
 on:
   push:
@@ -17,14 +17,8 @@ jobs:
       - name: Install dependencies
         run: brew install ldid
 
-      - name: Build the app (unsigned)
-        run: .github/scripts/build-unsigned.sh
-
-      - name: Add Entitlements
-        run: .github/scripts/add-entitlements.sh
-
-      - name: Create IPA manually
-        run: .github/scripts/create-ipa.sh
+      - name: Build, sign and package IPA
+        run: .github/scripts/build-and-package.sh
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

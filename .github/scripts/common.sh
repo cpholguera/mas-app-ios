@@ -24,6 +24,9 @@ detect_xcode_project() {
       return
     fi
   done
+
+  echo "Error: No .xcworkspace or .xcodeproj found in $(pwd)" >&2
+  return 1
 }
 
 # Determine the Xcode scheme to build.
