@@ -5,8 +5,7 @@ add-entitlements.sh         # Add entitlements with ldid
 build-for-simulator.sh      # Build for simulator
 build-for-testing.sh        # Build for testing
 build-unsigned.sh           # Build unsigned archive
+common.sh                   # Common build functions
 create-ipa.sh               # Create IPA from archive
-install-dependencies.sh     # Install brew deps & pods
-launch-on-simulator.sh      # Launch app on simulator
-setup-simulator.sh          # Boot + install (combined!)
+setup-on-simulator.sh       # Boot + install (combined!)
 ```
