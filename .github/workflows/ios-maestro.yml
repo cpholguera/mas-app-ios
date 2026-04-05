@@ -15,7 +15,8 @@ jobs:
     permissions:
       contents: read
     env:
-      SIMULATOR: "iPhone 17e"
+      SIMULATOR: "iPhone 16e"
+      OS_VERSION: "26.2"
 
     steps:
       - name: Checkout Code
@@ -27,7 +28,7 @@ jobs:
           echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
 
       - name: Build App, Boot Simulator and Install App
-        run: .github/scripts/build-and-install-on-simulator.sh "$SIMULATOR"
+        run: .github/scripts/build-and-install-on-simulator.sh "$SIMULATOR" "$OS_VERSION"
 
       - name: Run Maestro Tests
         run: maestro test .maestro/app-test.yaml

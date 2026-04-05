@@ -12,10 +12,15 @@ jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-26
+    permissions:
+      contents: read
+    env:
+      SIMULATOR: "iPhone 16e"
+      OS_VERSION: "26.2"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Build
-        run: .github/scripts/build-for-testing.sh
+        run: .github/scripts/build-for-testing.sh "$SIMULATOR" "$OS_VERSION"
