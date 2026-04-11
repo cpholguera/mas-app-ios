@@ -88,3 +88,7 @@ owasp-mastg/demos/MASTG-DEMO-XXXX/
 ```
 
 Finalize your demo by adding a `MASTG-DEMO-XXXX.md` file, tweaking the `run.sh` script, and adding the relevant output files.
+
+## Alternative Build Methods
+
+For CI/CD and alternative build configurations, see the [build scripts documentation](.github/scripts/README.md).
