@@ -35,11 +35,18 @@ detect_xcode_project() {
 # Sets: APP_NAME
 detect_scheme() {
   local scheme_arg="$1"
+  local xcodebuild_output
 
   if [ -n "$scheme_arg" ]; then
     APP_NAME="$scheme_arg"
   else
-    APP_NAME=$(xcodebuild -list -"$FILETYPE_PARAMETER" "$FILE_TO_BUILD" 2>/dev/null | \
+    if ! xcodebuild_output=$(xcodebuild -list -"$FILETYPE_PARAMETER" "$FILE_TO_BUILD" 2>&1); then
+      echo "Error: Failed to list schemes from $FILE_TO_BUILD" >&2
+      echo "$xcodebuild_output" >&2
+      return 1
+    fi
+
+    APP_NAME=$(printf '%s\n' "$xcodebuild_output" | \
       awk '/Schemes:/{flag=1;next} /^$/{flag=0} flag' | head -n 1 | awk '{$1=$1;print}')
     if [ -z "$APP_NAME" ]; then
       APP_NAME="MASTestApp"

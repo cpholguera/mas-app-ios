@@ -16,6 +16,15 @@ REPO_ROOT="$(pwd)"
 
 IPA_NAME="$1"
 EXTRA_PLIST="$2"
+MERGED_PLIST=""
+
+cleanup() {
+  if [[ -n "${MERGED_PLIST:-}" && -f "$MERGED_PLIST" ]]; then
+    rm -f "$MERGED_PLIST"
+  fi
+}
+
+trap cleanup EXIT
 
 if [[ -n "$IPA_NAME" && "$IPA_NAME" != *.ipa ]]; then
   echo "Error: ipa_name must end with .ipa (got: $IPA_NAME)" >&2
@@ -43,7 +52,7 @@ BASE_PLIST="entitlements.plist"
 TARGET_PLIST="$BASE_PLIST"
 
 if [ -n "$EXTRA_PLIST" ]; then
-  MERGED_PLIST=$(mktemp /tmp/entitlements.XXXXXX)
+  MERGED_PLIST=$(mktemp "${TMPDIR:-/tmp}/entitlements.XXXXXX")
   cp "$EXTRA_PLIST" "$MERGED_PLIST"
   /usr/libexec/PlistBuddy -c "Merge $BASE_PLIST" "$MERGED_PLIST"
   TARGET_PLIST="$MERGED_PLIST"
