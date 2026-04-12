@@ -1,10 +1,3 @@
-//
-//  DemoResults.swift
-//  MASTestApp
-//
-//  Created by Stefan on 20.05.2025.
-//
-
 import Foundation
 import OSLog
 
