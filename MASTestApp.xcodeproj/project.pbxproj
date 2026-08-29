@@ -17,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB0E72882FB0EC960025014D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CB3F29632EF16D1A00FC9F71 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		CBFA8C042BDE94710047F3A3 /* MASTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MASTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFA8C072BDE94710047F3A3 /* MASTestAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MASTestAppApp.swift; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 		CBFA8C062BDE94710047F3A3 /* MASTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				CB0E72882FB0EC960025014D /* Info.plist */,
 				F85F705B2DDCCB390045930E /* DemoResults.swift */,
 				CBFA8C072BDE94710047F3A3 /* MASTestAppApp.swift */,
 				CBFA8C092BDE94710047F3A3 /* ContentView.swift */,
@@ -293,6 +295,7 @@
 				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MASTestApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -326,6 +329,7 @@
 				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MASTestApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
